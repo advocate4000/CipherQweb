@@ -1196,12 +1196,15 @@ function handleScanRequest(e){
       if (local) {
         msg.textContent = 'Netlify Forms only work on the deployed site, not locally.';
       } else {
-        msg.textContent = 'Form not registered — check Netlify → Forms, then redeploy.';
+        msg.textContent = 'Form detection is off in Netlify — enable it, then redeploy.';
         console.warn(
-          'Netlify returned 404 for POST /. The form was not detected at deploy time.\n' +
-          'Check: 1) Netlify dashboard → Forms lists "scan-request"\n' +
-          '       2) the deploy log mentions form detection\n' +
-          '       3) netlify.toml has no catch-all /* redirect (it intercepts the POST)');
+          'Netlify returned 404 for POST /. No form is registered for this site.\n\n' +
+          'Most likely: form detection is DISABLED. Netlify turns it off by default\n' +
+          'on every site created since April 2023.\n\n' +
+          '  Forms -> Usage and configuration -> Form detection -> Enable\n' +
+          '  then REDEPLOY (enabling does not scan existing deploys)\n\n' +
+          'Also check: no catch-all "/* -> /index.html 200" redirect exists — it\n' +
+          'intercepts the POST before the form handler runs.');
       }
     } else {
       msg.className = 'form-message error';

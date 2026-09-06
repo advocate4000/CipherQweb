@@ -54,27 +54,34 @@ Netlify detects the form by parsing `index.html` at deploy time, so it only
 becomes active *after* a deploy. It will not work when opening the file locally;
 submitting there returns 404 and the page says so explicitly.
 
-### After deploying
+### Setup — form detection is OFF by default
 
-1. Site dashboard → **Forms** — you should see `scan-request` listed
-2. **Forms → Settings → Form notifications** → add an email notification to
+Since April 2023 Netlify disables form detection on all new sites. Correct
+markup is not enough; the site will 404 on submit until you switch it on.
+
+1. **Forms → Usage and configuration → Form detection → Enable form detection**
+2. **Redeploy.** Enabling does not retroactively scan existing deploys — the
+   next deploy is when the form is registered.
+3. Confirm `scan-request` now appears under **Forms**
+4. **Forms → Settings → Form notifications** → add an email notification to
    `simon@weaponsgrade.uk`
 
-Without step 2 submissions are still captured and visible in the dashboard, but
-nothing lands in your inbox.
+Without step 4 submissions are captured and visible in the dashboard, but
+nothing reaches your inbox.
 
 ### If submitting returns 404 ("Form not registered")
 
 Netlify received the POST but has no form bound to it. In order of likelihood:
 
-1. **A catch-all redirect is intercepting the POST.** Any
+1. **Form detection is disabled.** Off by default on every site created since
+   April 2023. Enable it under **Forms → Usage and configuration → Form
+   detection**, then *redeploy* — enabling alone does not scan existing deploys.
+   This is by far the most common cause and correct markup will not save you.
+2. **A catch-all redirect is intercepting the POST.** Any
    `/* -> /index.html 200` rule in `netlify.toml` or `_redirects` swallows the
    submission before the form handler runs. This config deliberately has none.
    Restricting such a rule by request method does not help — `Method` is not a
    supported redirect condition.
-2. **The form was not detected at deploy.** Dashboard → **Forms** should list
-   `scan-request`. The deploy log also reports detected forms. If absent,
-   redeploy; a cached build can skip detection.
 3. **You are testing locally.** Netlify Forms only exist on the deployed site.
    The page detects this and says so rather than showing a generic error.
 
