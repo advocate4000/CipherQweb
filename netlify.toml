@@ -1,17 +1,20 @@
 # Netlify configuration for the CipherQ marketing site.
 #
-# The site is a single self-contained index.html. No build step, no bundler,
-# no server-side code — the scan-request form posts directly to Formspree.
+# Single self-contained index.html. No build step, no bundler, no server-side
+# code. The scan-request form uses Netlify Forms, which posts to this origin.
 
 [build]
   publish = "."
   command = ""
 
-# Anything not found falls back to the single page rather than a bare 404.
+# GET fallback only. Netlify Forms needs POST / to reach the forms handler,
+# so the catch-all is restricted to GET — a blanket /* redirect would swallow
+# the submission and return the page instead of recording it.
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  conditions = {Method = ["GET", "HEAD"]}
 
 [[headers]]
   for = "/*"
@@ -21,8 +24,8 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "geolocation=(), microphone=(), camera=()"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-    # Fonts from Google, form posts to Formspree, scan link to Render.
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; form-action https://formspree.io; connect-src https://formspree.io; frame-ancestors 'self'; base-uri 'self'"
+    # Fonts from Google; the form posts back to this origin via Netlify Forms.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data:; form-action 'self'; connect-src 'self'; frame-ancestors 'self'; base-uri 'self'"
 
 [[headers]]
   for = "/index.html"

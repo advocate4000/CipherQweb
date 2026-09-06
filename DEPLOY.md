@@ -45,13 +45,32 @@ The wrong publish directory is the other common cause of a 404.
 | `netlify.toml` | SPA fallback, security headers, cache policy |
 | `robots.txt` | Allows indexing |
 
-## Activate the form
+## The form
 
-The scan-request form posts to Formspree. **On the first submission**, Formspree
-emails `simon@weaponsgrade.uk` asking you to confirm the endpoint. Click that
-link or submissions are discarded silently.
+Uses **Netlify Forms** — built into the platform. No third-party account, no
+endpoint ID, no confirmation email to click.
 
-Submit the form yourself once after deploying, then confirm.
+Netlify detects the form by parsing `index.html` at deploy time, so it only
+becomes active *after* a deploy. It will not work when opening the file locally;
+submitting there returns 404 and the page says so explicitly.
+
+### After deploying
+
+1. Site dashboard → **Forms** — you should see `scan-request` listed
+2. **Forms → Settings → Form notifications** → add an email notification to
+   `simon@weaponsgrade.uk`
+
+Without step 2 submissions are still captured and visible in the dashboard, but
+nothing lands in your inbox.
+
+### If the form does not appear
+
+Netlify only detects forms in HTML present at deploy time. If `scan-request` is
+missing from the Forms tab, redeploy — a cached build can skip detection.
+
+Spam is filtered by a honeypot field (`bot-field`) that is hidden from users.
+
+Free tier covers 100 submissions per month.
 
 ## Check it worked
 
