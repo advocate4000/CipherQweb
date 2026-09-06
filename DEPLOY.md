@@ -63,10 +63,28 @@ submitting there returns 404 and the page says so explicitly.
 Without step 2 submissions are still captured and visible in the dashboard, but
 nothing lands in your inbox.
 
-### If the form does not appear
+### If submitting returns 404 ("Form not registered")
 
-Netlify only detects forms in HTML present at deploy time. If `scan-request` is
-missing from the Forms tab, redeploy — a cached build can skip detection.
+Netlify received the POST but has no form bound to it. In order of likelihood:
+
+1. **A catch-all redirect is intercepting the POST.** Any
+   `/* -> /index.html 200` rule in `netlify.toml` or `_redirects` swallows the
+   submission before the form handler runs. This config deliberately has none.
+   Restricting such a rule by request method does not help — `Method` is not a
+   supported redirect condition.
+2. **The form was not detected at deploy.** Dashboard → **Forms** should list
+   `scan-request`. The deploy log also reports detected forms. If absent,
+   redeploy; a cached build can skip detection.
+3. **You are testing locally.** Netlify Forms only exist on the deployed site.
+   The page detects this and says so rather than showing a generic error.
+
+The browser console carries the same checklist on failure.
+
+### Requirements the markup already satisfies
+
+`data-netlify="true"`, a unique form `name`, unique `name` on every input, a
+hidden `form-name` field matching the form name, a url-encoded POST body, and
+every field present in the static HTML. If you edit the form, keep all six.
 
 Spam is filtered by a honeypot field (`bot-field`) that is hidden from users.
 

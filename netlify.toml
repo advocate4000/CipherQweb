@@ -7,14 +7,13 @@
   publish = "."
   command = ""
 
-# GET fallback only. Netlify Forms needs POST / to reach the forms handler,
-# so the catch-all is restricted to GET — a blanket /* redirect would swallow
-# the submission and return the page instead of recording it.
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  conditions = {Method = ["GET", "HEAD"]}
+# NO catch-all redirect.
+#
+# A blanket "/* -> /index.html 200" rewrite intercepts the form POST before
+# Netlify's form handler sees it, which surfaces as a 404 on submit. Netlify
+# already serves index.html at / for a single-page site, so the rule bought
+# nothing and cost the form. Restricting it by request method is not an option
+# either — Method is not a supported redirect condition.
 
 [[headers]]
   for = "/*"

@@ -19,7 +19,7 @@
   --white:   #dedad2;
   --gray:    #888580;
   --gray-d:  #383632;
-  --red:     #d44040;
+  --red:     #e05555;
   --green:   #0fa868;
   --cyan:    #18a0c4;
   --font:    'JetBrains Mono', 'Courier New', monospace;
@@ -355,7 +355,7 @@ section { padding: 96px 0; }
 }
 .cap-list { display: flex; flex-direction: column; gap: 5px; }
 .cap-item {
-  font-size: 9px; color: var(--gray-d);
+  font-size: 9px; color: var(--gray);
   padding-left: 12px; position: relative;
 }
 .cap-item::before { content: '›'; position: absolute; left: 0; color: var(--amber); }
@@ -592,7 +592,7 @@ footer {
   border-color: var(--amber);
   box-shadow: 0 0 12px rgba(240,154,24,0.2);
 }
-.form-input::placeholder { color: var(--gray-d); }
+.form-input::placeholder { color: var(--gray); }
 .form-submit {
   width: 100%; padding: 12px;
   background: var(--amber); color: #080808;
@@ -1024,7 +1024,9 @@ footer {
     <!-- Netlify Forms: detected by parsing this markup at deploy time.
          name + data-netlify are required; form-name must also be sent in the
          POST body because we submit via fetch rather than a native form post. -->
-    <form id="request-form" name="scan-request" method="POST"
+    <!-- action="/" means a submit still works if JavaScript fails or is blocked;
+         the handler below upgrades it to an in-page submission when it can. -->
+    <form id="request-form" name="scan-request" method="POST" action="/"
           data-netlify="true" netlify-honeypot="bot-field"
           onsubmit="handleScanRequest(event)">
       <input type="hidden" name="form-name" value="scan-request">
@@ -1187,9 +1189,20 @@ function handleScanRequest(e){
       form.reset();
       setTimeout(() => { document.getElementById('request-modal').style.display = 'none'; }, 2200);
     } else if (res.status === 404) {
-      // Running locally, or the form was not detected at deploy time.
+      // Netlify received the POST but has no form registered for it.
       msg.className = 'form-message error';
-      msg.textContent = 'Form not active yet — email hello@weaponsgrade.uk';
+      const local = ['localhost','127.0.0.1',''].indexOf(location.hostname) !== -1
+                 || location.protocol === 'file:';
+      if (local) {
+        msg.textContent = 'Netlify Forms only work on the deployed site, not locally.';
+      } else {
+        msg.textContent = 'Form not registered — check Netlify → Forms, then redeploy.';
+        console.warn(
+          'Netlify returned 404 for POST /. The form was not detected at deploy time.\n' +
+          'Check: 1) Netlify dashboard → Forms lists "scan-request"\n' +
+          '       2) the deploy log mentions form detection\n' +
+          '       3) netlify.toml has no catch-all /* redirect (it intercepts the POST)');
+      }
     } else {
       msg.className = 'form-message error';
       msg.textContent = 'Could not send (' + res.status + '). Email hello@weaponsgrade.uk';
