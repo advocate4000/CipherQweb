@@ -1,0 +1,30 @@
+# Netlify configuration for the CipherQ marketing site.
+#
+# The site is a single self-contained index.html. No build step, no bundler,
+# no server-side code — the scan-request form posts directly to Formspree.
+
+[build]
+  publish = "."
+  command = ""
+
+# Anything not found falls back to the single page rather than a bare 404.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    # Fonts from Google, form posts to Formspree, scan link to Render.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; form-action https://formspree.io; connect-src https://formspree.io; frame-ancestors 'self'; base-uri 'self'"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
