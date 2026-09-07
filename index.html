@@ -1011,7 +1011,7 @@ footer {
     <h2 class="cta-h2">See your quantum exposure<br><em>in minutes.</em></h2>
     <p class="cta-sub">No installation. No agent. No configuration. Enter a domain and receive a full post-quantum cryptographic threat assessment — free.</p>
     <button type="button" class="btn-p" onclick="document.getElementById('request-modal').style.display='flex'" style="font-size:12px;padding:16px 52px">Request Free Scan</button>
-    <span class="cta-url" style="display:block;margin-top:24px">Questions? <a href="mailto:hello@weaponsgrade.uk">hello@weaponsgrade.uk</a></span>
+    <span class="cta-url" style="display:block;margin-top:24px">Questions? <a href="mailto:info@cipherq.co">info@cipherq.co</a></span>
   </div>
 </section>
 
@@ -1208,12 +1208,12 @@ function handleScanRequest(e){
       }
     } else {
       msg.className = 'form-message error';
-      msg.textContent = 'Could not send (' + res.status + '). Email hello@weaponsgrade.uk';
+      msg.textContent = 'Could not send (' + res.status + '). Email info@cipherq.co';
     }
   })
   .catch(() => {
     msg.className = 'form-message error';
-    msg.textContent = 'Connection problem. Email hello@weaponsgrade.uk';
+    msg.textContent = 'Connection problem. Email info@cipherq.co';
   })
   .finally(() => { btn.disabled = false; });
 }
