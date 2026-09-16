@@ -674,19 +674,22 @@ footer {
   <div class="hero-stats">
     <div class="h-stat">
       <span class="stat-val" id="s-days">—</span>
-      <span class="stat-lbl">Days to NCSC 2028 Discovery Deadline</span>
+      <span class="stat-lbl">Days to the NCSC's 2028 deadline</span>
+    </div>
+    <!-- These two are a pair. Read together they are the whole argument: the
+         traffic is protected, the certificates proving who you are talking to
+         are not. Keep them adjacent and keep the wording parallel. -->
+    <div class="h-stat">
+      <span class="stat-val"><span id="s-traffic">—</span>%</span>
+      <span class="stat-lbl">Web traffic already quantum-safe</span>
     </div>
     <div class="h-stat">
-      <span class="stat-val" id="s-vuln">—</span>
-      <span class="stat-lbl">Publicly Trusted CAs Issuing PQ Certificates</span>
-    </div>
-    <div class="h-stat">
-      <span class="stat-val" id="s-stds">—</span>
-      <span class="stat-lbl">NIST PQC Standards Published</span>
+      <span class="stat-val" id="s-certs">—</span>
+      <span class="stat-lbl">Public certificates that are quantum-safe</span>
     </div>
     <div class="h-stat">
       <span class="stat-val">~<span id="s-crqc">—</span></span>
-      <span class="stat-lbl">Years to Working CRQC Estimate</span>
+      <span class="stat-lbl">Years until quantum breaks today's encryption</span>
     </div>
   </div>
 </section>
@@ -1281,9 +1284,29 @@ window.addEventListener('load',()=>{
   const deadline = new Date('2028-01-01');
   const days = Math.max(0, Math.ceil((deadline - new Date())/(86400000)));
   setTimeout(()=>countTo(document.getElementById('s-days'), days, 1800), 400);
-  setTimeout(()=>countTo(document.getElementById('s-vuln'), 0, 1600), 600);
-  setTimeout(()=>countTo(document.getElementById('s-stds'), 3, 1200), 800);
   setTimeout(()=>countTo(document.getElementById('s-crqc'), 7, 1400), 500);
+
+  // Zero publicly trusted CAs can issue a quantum-safe TLS certificate: the
+  // CA/Browser Forum ballot is still in draft. Not a countdown — a flat fact.
+  setTimeout(()=>countTo(document.getElementById('s-certs'), 0, 900), 700);
+
+  /* The traffic figure is live from Cloudflare Radar via a Netlify function,
+     because it moves: 32% in January 2025, around two-thirds now. The pinned
+     number below is only what shows if the call fails, so the bar never sits
+     on an em dash. */
+  const PINNED = 67;
+  const paint = (v) => setTimeout(()=>countTo(document.getElementById('s-traffic'), v, 1600), 600);
+
+  const ctl = new AbortController();
+  const bail = setTimeout(()=>ctl.abort(), 3000);
+  fetch('/.netlify/functions/pq-stat', { signal: ctl.signal })
+    .then(r => r.ok ? r.json() : Promise.reject(new Error(r.status)))
+    .then(d => {
+      const v = Number(d && d.supported);
+      paint(isFinite(v) && v > 0 && v <= 100 ? Math.round(v) : PINNED);
+    })
+    .catch(() => paint(PINNED))        // offline, blocked, or opened as a file
+    .finally(() => clearTimeout(bail));
 });
 
 /* SCROLL FADE-IN */

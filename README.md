@@ -77,3 +77,55 @@ where the bar is hidden.
 
 Measured after the change: 72px gap at 768, 1024 and 1440; no horizontal
 overflow at 390, 768, 1024 or 1440.
+
+---
+
+## Hero stats — live figure from Cloudflare Radar
+
+The stats bar used to read `0 — Publicly Trusted CAs Issuing PQ Certificates`.
+The fact was right and the framing was not: a zero on a hero reads as "nothing
+is happening here" unless you already know that key exchange and signatures are
+different problems. It now reads as a pair, in plain words:
+
+    67%   Web traffic already quantum-safe
+    0     Public certificates that are quantum-safe
+
+Adjacent and parallel, so the contrast does the work with no jargon. Keep them
+next to each other — split up, neither number means much.
+
+`NIST PQC Standards Published — 3` came out to make room. It was the least
+urgent of the four. Say the word and it goes back in place of something else.
+
+### Wiring the 67% to Cloudflare
+
+It is read live, because it moves — 32% in January 2025, around two-thirds now.
+A stale number on a compliance vendor's homepage is the same class of error as a
+misquoted regulator deadline.
+
+Radar's API needs a bearer token, so the call cannot happen in the browser; a
+token in a public bundle is a token that has leaked. `netlify/functions/pq-stat.js`
+holds it server-side and the page fetches `/.netlify/functions/pq-stat`.
+
+**Setup, once.** In Cloudflare, create an API token whose only permission is
+*Account → Radar → Read* (free tier is enough). In Netlify, Site settings →
+Environment variables:
+
+    CF_RADAR_TOKEN = <token>
+
+Redeploy. That is all — the function is picked up automatically from
+`netlify/functions/`.
+
+**It cannot break the homepage.** Every failure path — no token, 403, expired
+token, malformed reply, an implausible number, a timeout, the site opened from
+disk — returns 200 with a pinned 67 and `stale: true`, and the page falls back
+to the same figure if the fetch itself fails. All seven paths were tested.
+Checking `stale` in the JSON tells you whether the live feed is actually working:
+
+    curl https://cipherq.co/.netlify/functions/pq-stat
+
+Results are cached six hours in the function and at the CDN, so Radar sees one
+call every six hours rather than one per visitor.
+
+Verified after the change: 72px clearance above the bar at 768, 1024 and 1440;
+bar hidden at 390 as before; no horizontal overflow at any width; no page
+errors; live value and fallback value both paint correctly.
