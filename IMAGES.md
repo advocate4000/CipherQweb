@@ -1,6 +1,6 @@
 # CipherQ marketing site — image slots
 
-Three of the four visuals are hand-built SVG artwork inside the HTML: no image
+Four of the five visuals are hand-built SVG artwork inside the HTML: no image
 files, no external requests, no licensing exposure. The fourth — the cryostat in
 the threat section — is a photograph, `img/cryostat.jpg`. Photographs are
 optional upgrades, slot by slot, and nothing breaks if one goes missing: the
@@ -28,7 +28,7 @@ console — the page never shows a broken image.
 
 Leave `data-photo=""` and the artwork stands on its own.
 
-## The four slots
+## The five slots
 
 | Slot | Where | Artwork it carries | What suits a photo here |
 |---|---|---|---|
@@ -36,6 +36,7 @@ Leave `data-photo=""` and the artwork stands on its own.
 | First `.qband` | Between Threat and How It Works | Superconducting qubit lattice | A qubit chip or wafer close-up. Wide crop; the text sits on the left third. |
 | `.std-split .qimg` | Standards section, right of the four cards | Bloch sphere with state vector | Roughly square. The artwork is stronger here than most photos. |
 | Second `.qband` | Between Standards and the CTA | Intercepted signal trace | Wide crop, text on the right third. Also better as artwork than stock. |
+| `.qimg-axes` | Threat-model section | Three-axis comparison: HNDL / TNFL / DNEL | Nothing. This one is a diagram, not a picture — leave `data-photo` empty. It is hidden below 960px, where the stacked table carries the same content. |
 
 The cryostat used to sit in a two-column hero. The live hero is centred over an
 animated canvas and carries the stats bar, so it moved to the threat intro

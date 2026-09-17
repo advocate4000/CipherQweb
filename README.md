@@ -245,3 +245,49 @@ terms, put the line in that attribute — it prints bottom-right automatically.
 
 Verified at 390, 640, 768, 960, 1024, 1440 and 1920: photo loads and scales, no
 overflow, no page errors, fallback intact.
+
+---
+
+## Three-axis threat model added
+
+The site argued HNDL and only HNDL. The platform has carried all three axes
+since the DNEL merge, so the site was making a narrower case than the product
+supports. New `#axes` section, between the Threat section and the lattice band:
+
+- **The three-axis diagram** — `svg/axes.svg`, the bright rebuild, not the
+  dimmed first version.
+- **A four-row comparison table** — Property, The move, Detectable, Retired by,
+  across HNDL / TNFL / DNEL, with the DNEL column lit.
+- **The closing note** on why the last row is the one that matters.
+
+**The axis definitions are lifted verbatim from the platform's own `AXES` array**
+in `cipherq/index.html`, so the two surfaces cannot drift:
+
+| | HNDL | TNFL | DNEL |
+|---|---|---|---|
+| Property | Confidentiality | Authenticity | Access & non-repudiation |
+| The move | Traffic recorded today is read once a CRQC exists. | A recovered signing key mints new trusted artifacts. | Genuine credentials are presented. Nothing is forged, so nothing looks wrong. |
+| Detectable | No — the capture is passive | Yes — a forged artifact exists to examine | No — nothing is anomalous |
+| Retired by | Nothing. Captured traffic stays captured. | Re-issue under PQ signatures | Rotation |
+
+The Detectable and Retired-by rows are the DNEL note's own table. The platform
+renders a live risk level per axis from scan data; the site has no scan, so it
+shows these static properties instead of a figure it cannot compute. Do not put
+a hardcoded "HIGH" on a marketing page — it is the one number a prospect will
+ask you to justify.
+
+### Two structural notes
+
+**It is a real `<table>`, not a grid of divs.** Four labelled rows compared
+across three columns is a table; a screen reader should be told so.
+
+**It stacks below 960px.** Each row becomes a labelled block with HNDL / TNFL /
+DNEL sub-labels, via `data-axis` and `::before`, so every fact survives on a
+phone. The diagram hides there — it is drawn on a 1380px canvas with 13px
+labels, which scale to about 3px on a phone, worse than absent. The table is the
+mobile version of the same content.
+
+Verified at 390, 640, 768, 960, 1024, 1440 and 1920: table renders as a table at
+1024 and up and as stacked blocks below, no clipping, no overflow, no page
+errors. Logo, stats bar, both timelines, all five artwork slots and the cryostat
+photograph all unchanged.
