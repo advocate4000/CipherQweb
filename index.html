@@ -772,6 +772,28 @@ footer {
    appended at the end of the stylesheet, so overrides placed in the earlier
    @media blocks lost on source order at equal specificity. */
 @media (max-width: 960px) {
+  /* The diagram is drawn on a 1380-wide canvas with 13px labels. Scaled to a
+     phone those labels are about 3px — worse than absent. The stacked table
+     below carries every fact it does, so the diagram stands down here. */
+  .qimg-axes { display: none; }
+
+  /* A four-row comparison does not survive a phone as a table. Each cell
+     becomes a labelled block and the columns stack. */
+  .ax-table, .ax-table tbody, .ax-table tr,
+  .ax-table th, .ax-table td { display: block; width: 100%; }
+  .ax-table thead { display: none; }
+  .ax-table tr { margin-bottom: 26px; border: 1px solid var(--gray-d); }
+  .ax-table td { border: none; border-top: 1px solid var(--gray-d); }
+  .ax-table td::before {
+    content: attr(data-axis); display: block;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--amber); opacity: 0.8; margin-bottom: 7px;
+  }
+  .ax-row-h {
+    width: 100%; padding: 14px 18px;
+    background: var(--bg3); border-bottom: 1px solid var(--gray-d);
+    font-size: 10px; opacity: 1;
+  }
   /* Artwork stacks under the copy rather than squeezing into a half column. */
   .sec-split { grid-template-columns: 1fr; gap: 30px; }
   .qimg-machine { max-width: 400px; margin: 0 auto; }
@@ -787,6 +809,48 @@ footer {
   .qimg-machine { max-width: 300px; }
   .std-split .std-grid { grid-template-columns: 1fr; }
 }
+
+/* ── THREE-AXIS THREAT MODEL ── */
+#axes { background: var(--bg); }
+.qimg-axes {
+  margin-top: 46px; background: transparent;
+  border: 1px solid var(--gray-d);
+}
+/* Lighter than the photographic slots: this is a diagram, and the scanline
+   overlay that flatters a photograph eats 13px labels. */
+.qimg-axes::after {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 3px, rgba(0,0,0,0.10) 3px 4px),
+    radial-gradient(ellipse at center, transparent 72%, rgba(0,0,0,0.45) 100%);
+}
+/* The diagram states the three axes; this table is what it cannot show —
+   the four properties side by side. Semantic table, not a grid of divs. */
+.ax-table { width: 100%; border-collapse: collapse; margin-top: 46px; font-size: 12px; }
+.ax-table th, .ax-table td {
+  text-align: left; vertical-align: top;
+  padding: 16px 18px; border: 1px solid var(--gray-d);
+}
+.ax-table thead th { background: var(--bg3); border-bottom-width: 1px; }
+.ax-table thead th:first-child { background: transparent; border: none; }
+.ax-code { font-size: 19px; font-weight: 700; letter-spacing: 0.16em; color: var(--amber); display: block; }
+.ax-name { font-size: 12px; font-weight: 400; color: var(--gray); margin-top: 7px; line-height: 1.5; }
+.ax-row-h {
+  width: 132px; font-size: 9px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--amber); opacity: 0.8;
+  background: transparent; border-left: none;
+}
+.ax-table td { color: var(--gray); line-height: 1.7; background: var(--bg3); }
+/* DNEL is the axis this section exists to introduce, so its column is lit. */
+.ax-table .is-focus { background: var(--bg2); color: var(--white); }
+.ax-table thead th.is-focus { border-top: 3px solid var(--amber); }
+.ax-table thead th.is-focus .ax-code { text-shadow: 0 0 28px rgba(240,154,24,0.5); }
+.ax-note {
+  margin-top: 36px; max-width: 880px;
+  font-size: 13px; font-weight: 300; line-height: 1.95; color: var(--gray);
+  border-left: 2px solid var(--amber-b); padding-left: 22px;
+}
+.ax-note strong { color: var(--white); font-weight: 700; }
 </style>
 </head>
 <body>
@@ -946,6 +1010,57 @@ footer {
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+
+<!-- THREE-AXIS THREAT MODEL -->
+<section id="axes">
+  <div class="si">
+    <div class="s-label">■ Threat Model</div>
+    <h2 class="s-title">Three axes,<br><em>not one.</em></h2>
+    <p class="s-body">Harvest Now, Decrypt Later is the axis every briefing covers. It is not the only one, and it is not the one that will be hardest to explain afterwards. A quantum-capable adversary can take confidentiality, authenticity, or access — and the three behave nothing alike once they have.</p>
+
+    <figure class="qimg qimg-axes fi" data-photo="" data-credit=""><svg class="cq-art cq-art-axes" viewBox="0 0 1380 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three quantum threat models compared: harvest now decrypt later, trust now forge later, and deploy now exploit later. The third leaves no artifact behind." preserveAspectRatio="xMidYMid meet"><defs><filter id="cqx-gw" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="cqx-gt" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><marker id="cqx-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#f09a18"/></marker></defs><g transform="translate(30,0)"><g><rect x="0" y="24" width="400" height="452" rx="3" fill="#121212" stroke="#f09a18" stroke-opacity="0.42" stroke-width="1.3"/><rect x="0" y="24" width="400" height="3" fill="#f09a18" fill-opacity="0.8"/><text x="26" y="78" font-family="'Courier New',monospace" font-size="28" font-weight="700" letter-spacing="7" fill="#f09a18">HNDL</text><text x="26" y="106" font-family="'Courier New',monospace" font-size="15.5" fill="#f2e0bc" fill-opacity="0.95">Harvest Now, Decrypt Later</text><text x="26" y="134" font-family="'Courier New',monospace" font-size="12.5" letter-spacing="3.4" font-weight="700" fill="#f09a18" fill-opacity="0.95">CONFIDENTIALITY</text><line x1="26" y1="152" x2="374" y2="152" stroke="#f09a18" stroke-opacity="0.42" stroke-width="1.2"/><text x="26" y="182" font-family="'Courier New',monospace" font-size="14" font-weight="700" fill="#f09a18" fill-opacity="1">1 — Traffic is recorded</text><rect x="26" y="198" width="150" height="7" rx="1" fill="#f09a18" fill-opacity="0.95"/><rect x="26" y="211" width="128" height="7" rx="1" fill="#f09a18" fill-opacity="0.80"/><rect x="26" y="224" width="106" height="7" rx="1" fill="#f09a18" fill-opacity="0.65"/><rect x="26" y="237" width="84" height="7" rx="1" fill="#f09a18" fill-opacity="0.50"/><path d="M 200 220 L 250 220" stroke="#f09a18" stroke-width="2" marker-end="url(#cqx-arrow)"/><text x="268" y="226" font-family="'Courier New',monospace" font-size="13" fill="#f2e0bc" fill-opacity="0.9">stored</text><text x="26" y="290" font-family="'Courier New',monospace" font-size="14" font-weight="700" fill="#f09a18" fill-opacity="1">2 — Years later, a CRQC</text><rect x="26" y="318" width="46" height="38" rx="4" fill="none" stroke="#f09a18" stroke-width="2.6"/><path d="M 36 318 V 306 a 13 13 0 0 1 26 0" fill="none" stroke="#f09a18" stroke-opacity="0.7" stroke-width="2.6" stroke-dasharray="3 4"/><circle cx="49" cy="337" r="4.5" fill="#f09a18"/><text x="90" y="344" font-family="'Courier New',monospace" font-size="14" fill="#f2e0bc" fill-opacity="0.95">the archive is readable</text><line x1="26" y1="378" x2="374" y2="378" stroke="#f09a18" stroke-opacity="0.42" stroke-width="1.2"/><text x="26" y="404" font-family="'Courier New',monospace" font-size="12" fill="#f09a18" fill-opacity="0.95" font-weight="700">LEFT BEHIND</text><text x="26" y="430" font-family="'Courier New',monospace" font-size="14" fill="#f2e0bc" fill-opacity="0.95">Nothing at your perimeter —</text><text x="26" y="450" font-family="'Courier New',monospace" font-size="14" fill="#f2e0bc" fill-opacity="0.95">the capture happened elsewhere.</text></g></g><g transform="translate(490,0)"><g><rect x="0" y="24" width="400" height="452" rx="3" fill="#121212" stroke="#f09a18" stroke-opacity="0.42" stroke-width="1.3"/><rect x="0" y="24" width="400" height="3" fill="#f09a18" fill-opacity="0.8"/><text x="26" y="78" font-family="'Courier New',monospace" font-size="28" font-weight="700" letter-spacing="7" fill="#f09a18">TNFL</text><text x="26" y="106" font-family="'Courier New',monospace" font-size="15.5" fill="#f2e0bc" fill-opacity="0.95">Trust Now, Forge Later</text><text x="26" y="134" font-family="'Courier New',monospace" font-size="12.5" letter-spacing="3.4" font-weight="700" fill="#f09a18" fill-opacity="0.95">AUTHENTICITY</text><line x1="26" y1="152" x2="374" y2="152" stroke="#f09a18" stroke-opacity="0.42" stroke-width="1.2"/><text x="26" y="182" font-family="'Courier New',monospace" font-size="14" font-weight="700" fill="#f09a18" fill-opacity="1">1 — A signing key is recovered</text><circle cx="46" cy="218" r="15" fill="none" stroke="#f09a18" stroke-width="2.6"/><path d="M 58 229 L 84 255" stroke="#f09a18" stroke-width="2.6"/><path d="M 74 245 L 84 235 M 84 255 L 94 245" stroke="#f09a18" stroke-width="2.6"/><text x="26" y="290" font-family="'Courier New',monospace" font-size="14" font-weight="700" fill="#f09a18" fill-opacity="1">2 — New artifacts are minted</text><rect x="26" y="306" width="56" height="66" rx="2" fill="none" stroke="#f09a18" stroke-opacity="0.9" stroke-width="1.8"/><line x1="36" y1="320" x2="72" y2="320" stroke="#f09a18" stroke-opacity="0.6" stroke-width="1.6"/><line x1="36" y1="331" x2="72" y2="331" stroke="#f09a18" stroke-opacity="0.6" stroke-width="1.6"/><line x1="36" y1="342" x2="72" y2="342" stroke="#f09a18" stroke-opacity="0.6" stroke-width="1.6"/><circle cx="54" cy="358" r="7" fill="none" stroke="#f09a18" stroke-width="2"/><rect x="100" y="306" width="56" height="66" rx="2" fill="none" stroke="#f09a18" stroke-opacity="0.9" stroke-width="1.8"/><line x1="110" y1="320" x2="146" y2="320" stroke="#f09a18" stroke-opacity="0.6" stroke-width="1.6"/><line x1="110" y1="331" x2="146" y2="331" stroke="#f09a18" stroke-opacity="0.6" stroke-width="1.6"/><line x1="110" y1="342" x2="146" y2="342" stroke="#f09a18" stroke-opacity="0.6" stroke-width="1.6"/><circle cx="128" cy="358" r="7" fill="none" stroke="#ff6b6b" stroke-width="2"/><text x="182" y="347" font-family="'Courier New',monospace" font-size="26" font-weight="700" fill="#ff6b6b">&#215;</text><text x="208" y="347" font-family="'Courier New',monospace" font-size="14" fill="#ff6b6b" fill-opacity="1" font-weight="700">forged</text><line x1="26" y1="378" x2="374" y2="378" stroke="#f09a18" stroke-opacity="0.42" stroke-width="1.2"/><text x="26" y="404" font-family="'Courier New',monospace" font-size="12" fill="#f09a18" fill-opacity="0.95" font-weight="700">LEFT BEHIND</text><text x="26" y="430" font-family="'Courier New',monospace" font-size="14" fill="#f2e0bc" fill-opacity="0.95">An artifact. A chain to pin,</text><text x="26" y="450" font-family="'Courier New',monospace" font-size="14" fill="#f2e0bc" fill-opacity="0.95">a provenance to check.</text></g></g><g transform="translate(950,0)"><g><rect x="0" y="24" width="400" height="452" rx="3" fill="#121212" stroke="#ffc23a" stroke-opacity="0.7" stroke-width="1.6"/><rect x="0" y="24" width="400" height="5" fill="#ffc23a" fill-opacity="1"/><text x="26" y="78" font-family="'Courier New',monospace" font-size="28" font-weight="700" letter-spacing="7" fill="#ffc23a" filter="url(#cqx-gt)">DNEL</text><text x="26" y="106" font-family="'Courier New',monospace" font-size="15.5" fill="#f2e0bc" fill-opacity="0.95">Deploy Now, Exploit Later</text><text x="26" y="134" font-family="'Courier New',monospace" font-size="12.5" letter-spacing="3.4" font-weight="700" fill="#ffc23a" fill-opacity="0.95">ACCESS &#38; NON-REPUDIATION</text><line x1="26" y1="152" x2="374" y2="152" stroke="#f09a18" stroke-opacity="0.42" stroke-width="1.2"/><text x="26" y="182" font-family="'Courier New',monospace" font-size="14" font-weight="700" fill="#ffc23a" fill-opacity="1">1 — A credential you issued</text><rect x="26" y="198" width="96" height="60" rx="3" fill="none" stroke="#ffc23a" stroke-width="2"/><circle cx="48" cy="218" r="9" fill="none" stroke="#ffc23a" stroke-opacity="0.9" stroke-width="1.8"/><line x1="66" y1="215" x2="112" y2="215" stroke="#ffc23a" stroke-opacity="0.7" stroke-width="1.7"/><line x1="66" y1="224" x2="98" y2="224" stroke="#ffc23a" stroke-opacity="0.7" stroke-width="1.7"/><line x1="38" y1="242" x2="110" y2="242" stroke="#ffc23a" stroke-opacity="0.6" stroke-width="1.6"/><text x="140" y="234" font-family="'Courier New',monospace" font-size="23" font-weight="700" fill="#ffc23a">&#10003;</text><text x="168" y="234" font-family="'Courier New',monospace" font-size="14" fill="#ffc23a" fill-opacity="1" font-weight="700">still valid</text><text x="26" y="290" font-family="'Courier New',monospace" font-size="14" font-weight="700" fill="#ffc23a" fill-opacity="1">2 — It is presented, and accepted</text><path d="M 26 368 V 306 H 84" fill="none" stroke="#ffc23a" stroke-width="2.2"/><path d="M 84 306 L 118 294 V 368 L 84 368 Z" fill="#ffc23a" fill-opacity="0.2" stroke="#ffc23a" stroke-width="2.2"/><circle cx="92" cy="338" r="3.4" fill="#ffc23a"/><line x1="26" y1="368" x2="140" y2="368" stroke="#ffc23a" stroke-opacity="0.7" stroke-width="1.8"/><text x="152" y="332" font-family="'Courier New',monospace" font-size="14" fill="#ffc23a" fill-opacity="1">logged on as an</text><text x="152" y="352" font-family="'Courier New',monospace" font-size="14" fill="#ffc23a" fill-opacity="1">authorised operator</text><line x1="26" y1="378" x2="374" y2="378" stroke="#ffc23a" stroke-opacity="0.55" stroke-width="1.2"/><text x="26" y="404" font-family="'Courier New',monospace" font-size="12" fill="#ffc23a" fill-opacity="1" font-weight="700">LEFT BEHIND</text><text x="26" y="430" font-family="'Courier New',monospace" font-size="14" fill="#ffc23a" fill-opacity="1" font-weight="700">A clean audit entry.</text><text x="26" y="450" font-family="'Courier New',monospace" font-size="14" fill="#ffc23a" fill-opacity="0.95">Nothing looks wrong, because</text><text x="26" y="468" font-family="'Courier New',monospace" font-size="14" fill="#ffc23a" fill-opacity="0.95">nothing was forged.</text></g></g></svg></figure>
+
+    <table class="ax-table fi">
+      <thead>
+        <tr>
+          <td></td>
+          <th scope="col"><span class="ax-code">HNDL</span><span class="ax-name">Harvest Now, Decrypt Later</span></th>
+          <th scope="col"><span class="ax-code">TNFL</span><span class="ax-name">Trust Now, Forge Later</span></th>
+          <th scope="col" class="is-focus"><span class="ax-code">DNEL</span><span class="ax-name">Deploy Now, Exploit Later</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row" class="ax-row-h">Property</th>
+          <td data-axis="HNDL">Confidentiality</td>
+          <td data-axis="TNFL">Authenticity</td>
+          <td class="is-focus" data-axis="DNEL">Access &amp; non-repudiation</td>
+        </tr>
+        <tr>
+          <th scope="row" class="ax-row-h">The move</th>
+          <td data-axis="HNDL">Traffic recorded today is read once a CRQC exists.</td>
+          <td data-axis="TNFL">A recovered signing key mints new trusted artifacts.</td>
+          <td class="is-focus" data-axis="DNEL">Genuine credentials are presented. Nothing is forged, so nothing looks wrong.</td>
+        </tr>
+        <tr>
+          <th scope="row" class="ax-row-h">Detectable</th>
+          <td data-axis="HNDL">No — the capture is passive, and it happens somewhere you cannot see.</td>
+          <td data-axis="TNFL">Yes — a forged artifact exists, and can be examined.</td>
+          <td class="is-focus" data-axis="DNEL">No — nothing is anomalous. The audit entry is clean.</td>
+        </tr>
+        <tr>
+          <th scope="row" class="ax-row-h">Retired by</th>
+          <td data-axis="HNDL">Nothing. Captured traffic stays captured.</td>
+          <td data-axis="TNFL">Re-issue under post-quantum signatures.</td>
+          <td class="is-focus" data-axis="DNEL">Rotation.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="ax-note fi"><strong>The last row is the one that matters.</strong> HNDL and DNEL both get worse with delay, but they do not get worse in the same way. A credential recovered from a five-year-old handshake is worthless if the key it authenticates has since been re-issued. Traffic captured five years ago is not worthless, and never will be. That is why CipherQ scopes operator access around rotation and gateway placement rather than around cryptography alone — and why a DNEL finding is the one your logs will never raise.</p>
   </div>
 </section>
 
