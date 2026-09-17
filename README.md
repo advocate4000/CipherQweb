@@ -129,3 +129,119 @@ call every six hours rather than one per visitor.
 Verified after the change: 72px clearance above the bar at 768, 1024 and 1440;
 bar hidden at 390 as before; no horizontal overflow at any width; no page
 errors; live value and fallback value both paint correctly.
+
+---
+
+## Artwork restored
+
+The four quantum graphics were missing because the live site is a different
+lineage from the earlier build that carried them — they were never lost, just
+never in this file. They are now ported in:
+
+| Where | Artwork |
+|---|---|
+| Threat section, right of the intro | Dilution refrigerator cutaway, 300 K to 10 mK |
+| Band between Threat and How It Works | Superconducting qubit lattice |
+| Standards section, right of the cards | Bloch sphere with state vector |
+| Band between Standards and the CTA | Intercepted signal trace |
+
+All four are hand-built inline SVG: no image files, no external requests, no
+licensing exposure. `IMAGES.md` covers dropping real photographs into any of the
+four slots — one attribute per slot, with an amber duotone applied
+automatically — and the sourcing/licensing caveats worth reading first.
+
+The cryostat used to anchor a two-column hero. This site's hero is centred over
+an animated canvas and now carries the stats bar, so it went to the threat
+intro instead, where the 600px copy column left the right half empty. Nothing
+in the hero, logo, timeline or stats code was touched.
+
+### Three layout bugs found while fitting them
+
+**`1fr` is `minmax(auto, 1fr)`.** The card text's min-content width pushed the
+standards grid wider than its share and squeezed the Bloch sphere to nothing.
+Both split grids now use `minmax(0, …)` on every track.
+
+**`margin-left: auto` makes a grid item content-sized**, not stretched — and an
+SVG with only a `viewBox` and no `width` is 300px by default. That is why the
+sphere rendered at 300px inside a 473px column regardless of its `max-width`.
+Fixed with an explicit `width: 100%`.
+
+**Source order beat the media queries.** The imagery CSS was appended at the end
+of the stylesheet, after the existing `@media` blocks, so at equal specificity
+the base rules won and the responsive overrides did nothing. The imagery's own
+`@media` blocks now sit at the end, after the rules they override.
+
+Verified at 390, 640, 768, 960, 1024, 1440 and 1920: artwork scales, single
+column below 960, no horizontal overflow at any width, no page errors. Logo
+still 120x72, stats clearance still 72px, both timelines unchanged.
+
+---
+
+## Type scale raised
+
+The site was built on an 8–11px scale. That is a terminal-UI conceit, and it was
+costing legibility on exactly the parts that carry the argument — the threat
+timeline descriptions were 9px.
+
+Reading text now has a 12px floor; short uppercase labels get a smaller lift;
+display sizes are unchanged.
+
+| | was | now |
+|---|---|---|
+| Threat timeline event | 10px | 13px |
+| Threat timeline description | 9px | 12px |
+| Threat timeline year | 11px | 13px |
+| Threat card body | 11px | 13px |
+| Compliance milestone label / description | 9 / 8px | 11 / 11px |
+| Capability description / bullets | 10 / 9px | 12 / 12px |
+| Use-case body | 10px | 12px |
+| Standard name / description | 10 / 9px | 12 / 12px |
+| Four-step body | 10px | 12px |
+| Section intro | 13px | 14px |
+| Badges, chips, eyebrows, credits | 7–9px | 9–10px |
+
+Two columns were widened to stop the bigger type wrapping into narrow ribbons:
+the timeline event column 184 → 290px (the connector line absorbs it), and the
+compliance milestones 130 → 168px, which six across 1136px accommodates easily.
+
+**One mobile consequence, fixed.** At 390px the timeline's fixed event column
+plus the year and connector no longer fit the row. Rather than shrink the type
+back, the connector line is hidden below 640px and the event text flexes to fill
+the width. Panel padding drops from 28 to 18px to match.
+
+Checked at 390, 640, 768, 960, 1024, 1440 and 1920: nothing clipped vertically
+or horizontally in any of the resized blocks, no page overflow, no page errors.
+
+---
+
+## Cryostat photograph
+
+`img/cryostat.jpg` now fills the threat-section slot, through the same
+`data-photo` mechanism the slot was built for. The SVG cutaway stays underneath
+as the fallback — verified: with the file 404ing, the artwork is still visible
+and the photo element is removed from the DOM rather than left as a broken
+image.
+
+**It is cropped.** The original carried side panels reading "QUANTUM COMPUTING —
+A BRIGHTER TOMORROW", "DISCOVER / SOLVE / ACCELERATE / TRANSFORM" and "SCIENCE
+MEETS A BRIGHTER HUMANITY". That is quantum-computing boosterism, and it argues
+the opposite of the page it would sit on — a reader who notices it reads the
+site as less serious, not more. The crop takes the machine and the plinth and
+leaves all of it out. 740x1060, 216KB, progressive JPEG.
+
+**The amber duotone does the rest.** The photograph was already gold, and the
+`#cq-duotone` filter maps it onto the exact brand ramp, so it reads as part of
+the site rather than as a stock image dropped in. Scanlines and vignette come
+from `.qimg::after` as with every other slot.
+
+The slot was widened for it — a photograph earns more than line art did:
+`.sec-split`'s second column 0.62fr → 0.86fr, `.qimg-machine` 420 → 520px, and
+300px on a phone. The box carries `aspect-ratio: 74 / 106` to match the file, so
+`object-fit: cover` is not cropping anything; change the ratio and it will.
+
+One thing to confirm at your end: `data-credit` is empty because no credit came
+with the image. If it is from a stock library or a generator with attribution
+terms, put the line in that attribute — it prints bottom-right automatically.
+
+Verified at 390, 640, 768, 960, 1024, 1440 and 1920: photo loads and scales, no
+overflow, no page errors, fallback intact.
