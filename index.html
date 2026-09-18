@@ -320,13 +320,30 @@ section { padding: 96px 0; }
 .step:last-child { border-right: none; }
 .step:hover { background: var(--amber-g); }
 .step-n {
-  font-size: 10px; font-weight: 700;
+  font-size: 11px; font-weight: 700;
   letter-spacing: 0.2em; color: var(--amber);
   opacity: 0.55; margin-bottom: 18px;
 }
-.step-icon { font-size: 22px; display: block; margin-bottom: 14px; }
+/* Drawn icons, not font glyphs. 56px against the old 22px, and the glow comes
+   from a CSS drop-shadow rather than an SVG filter so there is no filter id to
+   collide with the artwork elsewhere on the page. */
+.step-icon {
+  display: block; width: 56px; height: 56px; margin-bottom: 18px;
+  color: var(--amber);
+  filter: drop-shadow(0 0 9px rgba(240,154,24,0.40));
+  transition: transform 0.22s ease, filter 0.22s ease;
+}
+.step-icon svg { width: 100%; height: 100%; display: block; }
+.step:hover .step-icon {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 0 16px rgba(240,154,24,0.70));
+}
+@media (prefers-reduced-motion: reduce) {
+  .step-icon { transition: none; }
+  .step:hover .step-icon { transform: none; }
+}
 .step h3 {
-  font-size: 12px; font-weight: 700;
+  font-size: 13px; font-weight: 700;
   letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--white); margin-bottom: 10px;
 }
@@ -1091,25 +1108,57 @@ footer {
     <div class="steps fi">
       <div class="step">
         <div class="step-n">01 / 04</div>
-        <span class="step-icon">◉</span>
+        <span class="step-icon"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" role="img" aria-label="Radar sweep discovering hosts, including one outside the known perimeter">
+  <circle cx="27" cy="37" r="21" stroke-opacity=".32"/>
+  <circle cx="27" cy="37" r="11" stroke-opacity=".2"/>
+  <path d="M27 37 L27 16 A21 21 0 0 1 45.2 26.5 Z" fill="currentColor" fill-opacity=".17" stroke="none"/>
+  <path d="M27 37 L27 16" stroke-opacity=".95"/>
+  <circle cx="18" cy="31" r="2.4" fill="currentColor" stroke="none"/>
+  <circle cx="35" cy="45" r="2.4" fill="currentColor" stroke="none"/>
+  <circle cx="21" cy="48" r="2.4" fill="currentColor" stroke="none" fill-opacity=".5"/>
+  <circle cx="53" cy="12" r="3.6" stroke-dasharray="2.6 2.6" stroke-opacity=".85"/>
+</svg></span>
         <h3>Discover</h3>
         <p>Deep TLS inspection, Certificate Transparency log crawling, DNS enumeration, and subdomain discovery map your complete cryptographic attack surface — including shadow IT and forgotten endpoints you didn't know existed.</p>
       </div>
       <div class="step">
         <div class="step-n">02 / 04</div>
-        <span class="step-icon">⊛</span>
+        <span class="step-icon"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" role="img" aria-label="A single probe forking into classical and post-quantum key exchanges">
+  <circle cx="9" cy="32" r="3.8" fill="currentColor" stroke="none"/>
+  <path d="M13 32 H24"/>
+  <path d="M24 32 C32 32 32 16 40 16"/>
+  <path d="M24 32 C32 32 32 48 40 48" stroke-dasharray="4 3"/>
+  <rect x="43.5" y="11.2" width="10" height="10" rx="1" fill="currentColor" fill-opacity=".92" stroke="none"/>
+  <path d="M48.5 41.6 l5.5 3.2 v6.4 l-5.5 3.2 -5.5-3.2 v-6.4 z" stroke-opacity=".95"/>
+  <circle cx="24" cy="32" r="2.3" fill="currentColor" stroke="none"/>
+</svg></span>
         <h3>Probe</h3>
         <p>Differential KEX probing negotiates both classical and post-quantum key exchanges to detect actual PQ capability — not just advertised support. Cipher suites, protocol versions, and algorithm preferences are precisely fingerprinted.</p>
       </div>
       <div class="step">
         <div class="step-n">03 / 04</div>
-        <span class="step-icon">◈</span>
+        <span class="step-icon"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" role="img" aria-label="A gauge reading high, representing the Quantum Exposure Index">
+  <path d="M11 45 A21 21 0 0 1 53 45" stroke-opacity=".28"/>
+  <path d="M11 45 A21 21 0 0 1 44.3 28"/>
+  <g stroke-width="1.6" stroke-opacity=".45">
+    <path d="M11 50 v3"/><path d="M32 22.5 v-3.5"/><path d="M53 50 v3"/>
+  </g>
+  <path d="M32 45 L41.5 31.5" stroke-width="2.2"/>
+  <circle cx="32" cy="45" r="3.4" fill="currentColor" stroke="none"/>
+</svg></span>
         <h3>Analyze</h3>
         <p>Findings are scored via the Quantum Exposure Index (QEI), weighted by your data sensitivity profile. HNDL risk windows, certificate lifecycles, and compliance gaps are cross-referenced against CNSA 2.0, FIPS 203/204, and sector mandates.</p>
       </div>
       <div class="step">
         <div class="step-n">04 / 04</div>
-        <span class="step-icon">◇</span>
+        <span class="step-icon"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" role="img" aria-label="Exposure stepping down through remediation bands to a target">
+  <path d="M6 13 h9 v11 h9 v10 h9 v12 h9" stroke-opacity=".95"/>
+  <circle cx="6" cy="13" r="2.9" fill="currentColor" stroke="none"/>
+  <path d="M42 46 H48" stroke-width="1.6" stroke-dasharray="3 3" stroke-opacity=".5"/>
+  <path d="M51 46 v-15" stroke-width="1.7" stroke-opacity=".9"/>
+  <path d="M51 31 l9 3.3 -9 3.3 z" fill="currentColor" fill-opacity=".9" stroke="none"/>
+  <circle cx="51" cy="46" r="2.9" fill="currentColor" stroke="none"/>
+</svg></span>
         <h3>Remediate</h3>
         <p>Actionable CBOM reports, vendor scorecards, and prioritized remediation paths give every stakeholder — from CISO to developer — the exact signal they need, complete with regulatory mapping and migration timelines.</p>
       </div>
