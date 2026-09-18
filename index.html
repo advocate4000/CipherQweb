@@ -518,12 +518,20 @@ footer {
 .foot-logo { font-size: 15px; font-weight: 700; color: var(--amber); letter-spacing: 0.12em; }
 .foot-meta { font-size: 10px; color: var(--gray); letter-spacing: 0.08em; }
 .foot-links { display: flex; gap: 22px; }
-.foot-links a {
+.foot-links a,
+.foot-links .foot-cta {
   font-size: 11px; color: var(--white);
   letter-spacing: 0.1em; text-transform: uppercase;
   transition: color 0.2s;
 }
-.foot-links a:hover { color: var(--amber); }
+.foot-links a:hover,
+.foot-links .foot-cta:hover { color: var(--amber); }
+/* Reset the UA button chrome so it sits in the row as a peer of the anchors. */
+.foot-links .foot-cta {
+  background: none; border: none; padding: 0;
+  font-family: var(--font); font-weight: 400;
+  cursor: pointer;
+}
 
 /* ── FADE-IN ── */
 .fi { opacity: 0; transform: translateY(18px); transition: opacity 0.55s ease, transform 0.55s ease; }
@@ -1411,7 +1419,8 @@ footer {
     <div class="foot-logo">CipherQ</div>
     <div class="foot-meta">Post-Quantum Cryptographic Intelligence · © 2026</div>
     <div class="foot-links">
-      <a href="https://cipherq.onrender.com">Platform</a>
+      <button type="button" class="foot-cta"
+              onclick="document.getElementById('request-modal').style.display='flex'">Request Free Scan</button>
       <a href="#threat">Threat Intel</a>
       <a href="#compliance">Compliance</a>
     </div>
